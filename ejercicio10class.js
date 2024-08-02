@@ -1,11 +1,9 @@
-
 class Jugador {
     constructor(nombre, posicion) {
         this.nombre = nombre;
         this.posicion = posicion;
     }
 }
-
 
 class Portero extends Jugador {
     constructor(nombre) {
@@ -31,7 +29,6 @@ class Delantero extends Jugador {
     }
 }
 
-
 class Equipo {
     constructor(nombre) {
         this.nombre = nombre;
@@ -44,7 +41,7 @@ class Equipo {
     }
 
     mostrarJugadores() {
-        console.log("Jugadores de " + this.nombre + ":");
+        console.log("Jugadores de " + this.nombre + " (Formación 4-3-3):");
         for (let i = 0; i < this.jugadores.length; i++) {
             let jugador = this.jugadores[i];
             console.log(jugador.nombre + " - " + jugador.posicion);
@@ -60,27 +57,37 @@ class Equipo {
     }
 }
 
+function mostrarMenu(local, visitante) {
+    console.clear();
+    console.log("Bienvenidos al simulador de partidos de fútbol");
+    console.log("Formaciones iniciales:");
+    console.log("Equipo Local: " + local.nombre);
+    local.mostrarJugadores();
+    console.log("Equipo Visitante: " + visitante.nombre);
+    visitante.mostrarJugadores();
+    console.log("El partido comenzará en breve...");
+}
 
-function simularPartido(equipo1, equipo2) {
-    equipo1.generarGolesAleatorios();
-    equipo2.generarGolesAleatorios();
+function simularPartido(local, visitante) {
+    local.generarGolesAleatorios();
+    visitante.generarGolesAleatorios();
 
     let segundos = 0;
     let intervalo = setInterval(() => {
         console.clear();
         console.log("Tiempo: " + segundos + " segundos");
-        console.log(equipo1.nombre + " " + equipo1.goles + " - " + equipo2.goles + " " + equipo2.nombre);
+        console.log(local.nombre + " (Local) " + local.goles + " - " + visitante.goles + " " + visitante.nombre + " (Visitante)");
         segundos++;
 
         if (segundos > 90) { 
             clearInterval(intervalo);
-            equipo1.mostrarGoles();
-            equipo2.mostrarGoles();
+            local.mostrarGoles();
+            visitante.mostrarGoles();
 
-            if (equipo1.goles > equipo2.goles) {
-                console.log(equipo1.nombre + " gana el partido!");
-            } else if (equipo2.goles > equipo1.goles) {
-                console.log(equipo2.nombre + " gana el partido!");
+            if (local.goles > visitante.goles) {
+                console.log(local.nombre + " gana el partido!");
+            } else if (visitante.goles > local.goles) {
+                console.log(visitante.nombre + " gana el partido!");
             } else {
                 console.log("El partido terminó en empate!");
             }
@@ -88,10 +95,8 @@ function simularPartido(equipo1, equipo2) {
     }, 1000);
 }
 
-
 let realMadrid = new Equipo('Real Madrid');
 let bayernMunich = new Equipo('Bayern Munich');
-
 
 realMadrid.agregarJugador(new Portero('Keylor Navas'));
 realMadrid.agregarJugador(new Defensa('Sergio Ramos'));
@@ -105,7 +110,6 @@ realMadrid.agregarJugador(new Delantero('Cristiano Ronaldo'));
 realMadrid.agregarJugador(new Delantero('Karim Benzema'));
 realMadrid.agregarJugador(new Delantero('Gareth Bale'));
 
-
 bayernMunich.agregarJugador(new Portero('Manuel Neuer'));
 bayernMunich.agregarJugador(new Defensa('Mats Hummels'));
 bayernMunich.agregarJugador(new Defensa('Jerome Boateng'));
@@ -118,9 +122,8 @@ bayernMunich.agregarJugador(new Delantero('Robert Lewandowski'));
 bayernMunich.agregarJugador(new Delantero('Thomas Muller'));
 bayernMunich.agregarJugador(new Delantero('Arjen Robben'));
 
+mostrarMenu(realMadrid, bayernMunich);
 
-realMadrid.mostrarJugadores();
-bayernMunich.mostrarJugadores();
-
-
-simularPartido(realMadrid, bayernMunich);
+setTimeout(() => {
+    simularPartido(realMadrid, bayernMunich);
+}, 20000); 
